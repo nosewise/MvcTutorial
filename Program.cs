@@ -6,7 +6,12 @@ using MvcMovie.Models;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<MvcMovieContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("MvcMovieContext") ?? throw new InvalidOperationException("Connection string 'MvcMovieContext' not found.")));
+    options.UseSqlite(builder.Configuration.GetConnectionString("AZURE_MYSQL_CONNECTIONSTRING") ?? throw new InvalidOperationException("Connection string 'MvcMovieContext' not found.")));
+builder.Services.AddStackExchangeRedisCache(options =>
+    {
+    options.Configuration = builder.Configuration["AZURE_REDIS_CONNECTIONSTRING"];
+    options.InstanceName = "SampleInstance";
+    });
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
